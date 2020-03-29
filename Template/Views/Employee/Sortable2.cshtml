@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Sortable2";
+}
+
+<h2>Sortable2</h2>
+
+<div class="span4">
+    <ul class="nested_with_switch vertical">
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+        <li>
+            Item 4
+            <ul>
+                <li>Item 3.1</li>
+                <li>Item 3.2</li>
+                <li>Item 3.3</li>
+                <li>Item 3.4</li>
+                <li>Item 3.5</li>
+                <li>Item 3.6</li>
+            </ul>
+        </li>
+        <li>Item 5</li>
+        <li>Item 6</li>
+    </ul>
+</div>
+
+<script>
+    $(function () {
+        var oldContainer;
+
+        $("ul.nested_with_switch").sortable({
+            group: 'nested',
+            afterMove: function (placeholder, container) {
+                if (oldContainer != container) {
+                    if (oldContainer) {
+                        oldContainer.el.removeClass("active");
+                    }
+
+                    container.el.addClass("active");
+                    oldContainer = container;
+                }
+            },
+
+            onDrop: function ($item, container, _super) {
+                container.el.removeClass("active");
+                _super($item, container);
+            }
+        });
+
+        $(".switch-container").on("click", ".switch", function (e) {
+            var method = $(this).hasClass("active") ? "enable" : "disable";
+            $(e.delegateTarget).next().sortable(method);
+        });
+    });
+</script>

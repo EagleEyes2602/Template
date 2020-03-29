@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Sortable";
+}
+
+<h2>Sortable</h2>
+<style>
+    span4 {
+        width: 300px;
+    }
+
+    ul.vertical li {
+        display: block;
+        margin: 5px;
+        padding: 5px;
+        border: 1px solid #cccccc;
+        color: #0088cc;
+        background: #eeeeee;
+    }
+
+    .dragged {
+        position: absolute;
+        opacity: 0.5;
+        z-index: 2000;
+    }
+</style>
+<div class="container">
+    <div class="span4">
+        <ul class="example vertical">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+            <li>Item 4</li>
+            <li>Item 5</li>
+            <li>Item 6</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("ol.example").sortable();
+    });
+    $(function () {
+        var adjustment;
+
+        $("ul.example").sortable({
+            group: 'example',
+            pullPlaceholder: false,
+
+            // animation on drop
+            onDrop: function ($item, container, _super) {
+                var $clonedItem = $('<li/>').css({ height: 0 });
+                $item.before($clonedItem);
+                $clonedItem.animate({
+                    'height': $item.height()
+                });
+
+                $item.animate($clonedItem.position(), function () {
+                    $clonedItem.detach();
+                    _super($item, container);
+                });
+            },
+
+            // set $item relative to cursor position
+            onDragStart: function ($item, container, _super) {
+                var offset = $item.offset(),
+                    pointer = container.rootGroup.pointer;
+
+                adjustment = {
+                    left: pointer.left - offset.left,
+                    top: pointer.top - offset.top
+                };
+
+                _super($item, container);
+            },
+
+            onDrag: function ($item, position) {
+                $item.css({
+                    left: position.left - adjustment.left,
+                    top: position.top - adjustment.top
+                });
+            }
+        });
+    });
+</script>

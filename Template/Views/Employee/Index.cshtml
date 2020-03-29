@@ -1,0 +1,101 @@
+﻿@*@model Template.Models.EmployeeViewModel*@
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    [pagging="main"] a {
+        cursor: pointer;
+        text-decoration: underline;
+        margin: .5em;
+    }
+
+    .current {
+        color: #3498db;
+    }
+</style>
+
+<h2>Index</h2>
+
+<table table-engine="main" class="table table-bordered" border="1" data="" id="sortable"></table>
+<div table-engine-pagging="main"></div>
+
+<div>
+    <select table-engine-pagesize="main"></select>
+</div>
+
+<table table-engine="main1" class="table table-bordered" border="1" data="" id="sortable"></table>
+<div table-engine-pagging="main1"></div>
+
+<div>
+    <select table-engine-pagesize="main1"></select>
+</div>
+<script src="~/Scripts/TableGridService.js"></script>
+
+<script>
+    //let data = JSON.parse($('table[table-engine="main"]').attr('data'));
+    //console.log(data);
+    let colOrder = [
+        //{ "ColumnName": "Id", "DisplayName": "Id" },
+        { "ColumnName": "Code", "DisplayName": "Mã" },
+        { "ColumnName": "FirstName", "DisplayName": "Họ" },
+        { "ColumnName": "LastName", "DisplayName": "Tên" },
+        { "ColumnName": "Gender", "DisplayName": "Giới tính" },
+        { "ColumnName": "DOB", "DisplayName": "Ngày sinh" },
+        { "ColumnName": "Email", "DisplayName": "Email" },
+        { "ColumnName": "Address", "DisplayName": "Địa chỉ" },
+        { "ColumnName": "LiteracyId", "DisplayName": "Mã học vấn" },
+        { "ColumnName": "Phone", "DisplayName": "Số điện thoại" },
+        { "ColumnName": "Description", "DisplayName": "Mô tả" }
+    ];
+    let engine = "main";
+    let desTbl = $('table[table-engine="' + engine + '"]');
+    let desPage = $('div[table-engine-pagging="' + engine + '"]');
+    let desPageSize = $('select[table-engine-pagesize="' + engine + '"]');
+    let test = new VQQGrid('test', colOrder, '/Employee/Paging', 1, 20, [5, 10, 20, 50], 3, desTbl, desPage, desPageSize);
+    test.GetPaging(1, 5);
+
+    let colOrder1 = [
+        //{ "ColumnName": "Id", "DisplayName": "Id" },
+        { "ColumnName": "Code", "DisplayName": "Mã" },
+        { "ColumnName": "FirstName", "DisplayName": "Họ" },
+        { "ColumnName": "LastName", "DisplayName": "Tên", IsRequired:true },
+        { "ColumnName": "Gender", "DisplayName": "Giới tính" },
+        { "ColumnName": "DOB", "DisplayName": "Ngày sinh" },
+        { "ColumnName": "Email", "DisplayName": "Email" },
+        { "ColumnName": "Address", "DisplayName": "Địa chỉ" },
+        { "ColumnName": "LiteracyId", "DisplayName": "Mã học vấn" },
+        { "ColumnName": "Phone", "DisplayName": "Số điện thoại" },
+        { "ColumnName": "Description", "DisplayName": "Mô tả" }
+    ];
+    let engine1 = "main1";
+    let desTbl1 = $('table[table-engine="' + engine1 + '"]');
+    let desPage1 = $('div[table-engine-pagging="' + engine1 + '"]');
+    let desPageSize1 = $('select[table-engine-pagesize="' + engine1 + '"]');
+    let test1 = new VQQGrid('test1', colOrder1, '/Employee/Paging', 1, 20, [5, 10, 20, 50], 3, desTbl1, desPage1, desPageSize1);
+    test1.GetPaging(1, 5);
+
+
+
+
+    $(function () {
+        $("#sortable thead").sortable({
+            //grid: [20, 10],
+            items: "> tr> th",
+            opacity: 0.5,
+            appendTo: document.body,
+            //axis: "x"
+            revert: true
+        });
+        //$("#sortable").sortable();
+        $("#sortable").disableSelection();
+        $("#sortable tbody").sortable({
+            //grid: [20, 10],
+            //items: " tr",
+            opacity: 0.5,
+            appendTo: document.body,
+            axis: "y",
+            revert: true
+        });
+    });
+</script>
