@@ -10,92 +10,185 @@
         margin: .5em;
     }
 
+    .table {
+        width: auto;
+    }
+
     .current {
         color: #3498db;
+    }
+
+    [class*='-sortable'] {
+        cursor: grab;
+    }
+
+    tr {
+        display: flex;
+    }
+
+    th span {
+        cursor: pointer;
+    }
+
+        th span.resize {
+            border-right: 2px solid #000;
+            float: right;
+            height: 16px;
+            cursor: grab;
+        }
+
+    .table {
+    }
+
+    td, th {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .filter-wrapper {
+        position: absolute;
+        background: #FFF;
+        display: none;
+        padding: 10px 15px;
+        width: 250px;
+        border: 1px solid #c5c5c59e;
+        -webkit-box-shadow: 0px 0px 10px 0px rgba(120,120,120,0.8);
+        -moz-box-shadow: 0px 0px 10px 0px rgba(120,120,120,0.8);
+        box-shadow: 0px 0px 10px 0px rgba(120,120,120,0.8);
+    }
+
+    .filter-button {
+        padding: 5px;
+        text-align: center;
+        border-bottom: 2px solid #2196f3;
+        margin-bottom: 3px;
+        cursor: pointer;
+    }
+
+        .filter-button i {
+            color: #2196f3;
+        }
+
+    .filter-option, .filter-input {
+        width: 100%;
+        padding: 5px 0;
+    }
+
+    .filter-option {
+    }
+
+        .filter-option select, .filter-input input {
+            width: 100%;
+            height: 25px;
+        }
+
+    .filter-input {
+    }
+
+    .pull-left {
+        float: left;
+    }
+
+    .pull-right {
+        float: right;
     }
 </style>
 
 <h2>Index</h2>
-
-<table table-engine="main" class="table table-bordered" border="1" data="" id="sortable"></table>
+<form id='test'>
+    <table table-engine="main" class="table table-bordered table-hover" border="1" data="" id="sortable"></table>
+</form>
 <div table-engine-pagging="main"></div>
 
-<div>
-    <select table-engine-pagesize="main"></select>
-</div>
+<div table-engine-pagesize="main"></div>
 
-<table table-engine="main1" class="table table-bordered" border="1" data="" id="sortable"></table>
-<div table-engine-pagging="main1"></div>
+<div table-engine-column-switch="main"></div>
+<button onclick="test.GetPaging(1, 5, 1);">Reset</button>
 
-<div>
-    <select table-engine-pagesize="main1"></select>
-</div>
+@*<div class="filter-wrapper">
+    <div class="filter-button">
+        <i class="fa fa-filter"></i>
+    </div>
+    <div class="filter-option">
+        <select>
+            <option value="0">==</option>
+            <option value="1">></option>
+            <option value="2"><</option>
+            <option value="3">>=</option>
+            <option value="4"><=</option>
+            <option value="7">!=</option>
+            <option value="5">Between</option>
+        </select>
+    </div>
+    <div class="filter-input">
+        <input type="text" name="name" value="" />
+    </div>
+</div>*@
+
+@*<div>
+        <input type="text" name="name1" value="" />
+        <select>
+            <option value="0">==</option>
+            <option value="6">Contain</option>
+        </select>
+    </div>*@
 <script src="~/Scripts/TableGridService.js"></script>
 
 <script>
-    //let data = JSON.parse($('table[table-engine="main"]').attr('data'));
-    //console.log(data);
+
     let colOrder = [
-        //{ "ColumnName": "Id", "DisplayName": "Id" },
-        { "ColumnName": "Code", "DisplayName": "Mã" },
-        { "ColumnName": "FirstName", "DisplayName": "Họ" },
-        { "ColumnName": "LastName", "DisplayName": "Tên" },
-        { "ColumnName": "Gender", "DisplayName": "Giới tính" },
-        { "ColumnName": "DOB", "DisplayName": "Ngày sinh" },
-        { "ColumnName": "Email", "DisplayName": "Email" },
-        { "ColumnName": "Address", "DisplayName": "Địa chỉ" },
-        { "ColumnName": "LiteracyId", "DisplayName": "Mã học vấn" },
-        { "ColumnName": "Phone", "DisplayName": "Số điện thoại" },
-        { "ColumnName": "Description", "DisplayName": "Mô tả" }
+        { ColumnName: "Code", DisplayName: "Mã", Visible: false, Order: 1, QuickSort: false, Width: "50px", Filter: true, DataType: { Name: 'text' } },
+        { ColumnName: "FirstName", DisplayName: "Họ", Visible: true, Order: 2, QuickSort: true, Width: "8vw", Filter: true, DataType: { Name: 'text' } },
+        { ColumnName: "LastName", DisplayName: "Tên", Visible: true, Order: 3, QuickSort: true, Width: "8vw", Filter: true, DataType: { Name: 'text' } },
+        { ColumnName: "Gender", DisplayName: "Giới tính", Visible: true, Order: 4, QuickSort: true, Width: "8vw", Filter: true, DataType: { Name: 'bool', True: 'Nữ', False: 'Nam' } },
+        { ColumnName: "DOB", DisplayName: "Ngày sinh", Visible: true, Order: 5, QuickSort: true, Width: "8vw", Filter: true, DataType: { Name: 'datetime', DataFormat: 'DD-MM-YYYY' } },
+        { ColumnName: "Email", DisplayName: "Email", Visible: true, Order: 6, QuickSort: true, Width: "8vw", Filter: true, DataType: { Name: 'text' } },
+        { ColumnName: "Address", DisplayName: "Địa chỉ", Visible: true, Order: 7, QuickSort: true, Width: "8vw", Filter: true, DataType: { Name: 'text' } },
+        { ColumnName: "LiteracyId", DisplayName: "Học vấn", Visible: true, Order: 8, QuickSort: true, Width: "8vw", Filter: true, DataType: { Name: 'singleselect' } },
+        { ColumnName: "Phone", DisplayName: "Số điện thoại", Visible: true, Order: 9, QuickSort: true, Width: "8vw", Filter: true, DataType: { Name: 'text' } },
+        { ColumnName: "Description", DisplayName: "Mô tả", Visible: true, Order: 10, QuickSort: true, Width: "8vw", Filter: true, DataType: { Name: 'text' } }
     ];
     let engine = "main";
     let desTbl = $('table[table-engine="' + engine + '"]');
     let desPage = $('div[table-engine-pagging="' + engine + '"]');
-    let desPageSize = $('select[table-engine-pagesize="' + engine + '"]');
-    let test = new VQQGrid('test', colOrder, '/Employee/Paging', 1, 20, [5, 10, 20, 50], 3, desTbl, desPage, desPageSize);
-    test.GetPaging(1, 5);
-
-    let colOrder1 = [
-        //{ "ColumnName": "Id", "DisplayName": "Id" },
-        { "ColumnName": "Code", "DisplayName": "Mã" },
-        { "ColumnName": "FirstName", "DisplayName": "Họ" },
-        { "ColumnName": "LastName", "DisplayName": "Tên", IsRequired:true },
-        { "ColumnName": "Gender", "DisplayName": "Giới tính" },
-        { "ColumnName": "DOB", "DisplayName": "Ngày sinh" },
-        { "ColumnName": "Email", "DisplayName": "Email" },
-        { "ColumnName": "Address", "DisplayName": "Địa chỉ" },
-        { "ColumnName": "LiteracyId", "DisplayName": "Mã học vấn" },
-        { "ColumnName": "Phone", "DisplayName": "Số điện thoại" },
-        { "ColumnName": "Description", "DisplayName": "Mô tả" }
-    ];
-    let engine1 = "main1";
-    let desTbl1 = $('table[table-engine="' + engine1 + '"]');
-    let desPage1 = $('div[table-engine-pagging="' + engine1 + '"]');
-    let desPageSize1 = $('select[table-engine-pagesize="' + engine1 + '"]');
-    let test1 = new VQQGrid('test1', colOrder1, '/Employee/Paging', 1, 20, [5, 10, 20, 50], 3, desTbl1, desPage1, desPageSize1);
-    test1.GetPaging(1, 5);
-
-
-
-
-    $(function () {
-        $("#sortable thead").sortable({
-            //grid: [20, 10],
-            items: "> tr> th",
-            opacity: 0.5,
-            appendTo: document.body,
-            //axis: "x"
-            revert: true
-        });
-        //$("#sortable").sortable();
-        $("#sortable").disableSelection();
-        $("#sortable tbody").sortable({
-            //grid: [20, 10],
-            //items: " tr",
-            opacity: 0.5,
-            appendTo: document.body,
-            axis: "y",
-            revert: true
-        });
-    });
+    let desPageSize = $('div[table-engine-pagesize="' + engine + '"]');
+    let desSwitch = $('div[table-engine-column-switch="' + engine + '"]');
+    let objN = 'test';
+    let url = '/Employee/Paging';
+    let dPC = 1;
+    let dPS = 5;
+    let dPSOpts = [5, 10, 20, 50];
+    let dMP = 3;
+    let test = new VQQGrid(objN, colOrder, url, dPC, dPS, dPSOpts, dMP, desTbl, desPage, desPageSize, desSwitch);
 </script>
+
+
+
+        @*//let abc = '1997-02-26T00:00:00';
+        //let datetime = Date.parse(abc);
+        //console.log(Date.parse(abc));
+        //let format = 'DD-MM-YYYY';
+        //console.log(moment('1997-02-26T08:10:00').format(format));
+
+        //$(function () {
+        //    $("#sortable").sortable();
+        //    $("#sortable").disableSelection();
+        //    $("#sortable tbody").sortable({
+        //        //grid: [20, 10],
+        //        //items: " tr",
+        //        opacity: 0.5,
+        //        appendTo: document.body,
+        //        axis: "y",
+        //        revert: true
+        //    });
+        //});
+
+        //const formatter = new Intl.NumberFormat('en-US', {
+        //    //style: 'currency',
+        //    //currency: 'VND',
+        //    minimumFractionDigits: 2
+        //})
+
+        //console.log(formatter.format(1000)); // "$1,000.00"
+        //console.log(formatter.format(10)); // "$10.00"
+        //console.log(formatter.format(123233000)); // "$123,233,000.00"*@

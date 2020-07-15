@@ -78,3 +78,4 @@ D:\Programmer\TempProject\Template\Template\obj\Debug\Template.csproj.CopyComple
 D:\Programmer\TempProject\Template\Template\obj\Debug\Template.dll
 D:\Programmer\TempProject\Template\Template\obj\Debug\Template.pdb
 D:\Programmer\TempProject\Template\Template\obj\Debug\Template.csprojAssemblyReference.cache
+D:\Programmer\TempProject\Template\Template\bin\System.Linq.Dynamic.dll
