@@ -17,6 +17,17 @@ namespace Template.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Trong này là hàm main load phân trang table.
+        /// Mục đích chính là tạo template table
+        /// Dùng List data thông thường thôi không có kết nối DB
+        /// Dùng dynamic linq
+        /// </summary>
+        /// <param name="pageCount"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="sort"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult Paging(int pageCount = 1, int pageSize = 10, SortModel sort = null, List<WhereModel> filter = null)
         {

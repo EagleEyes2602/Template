@@ -1,4 +1,11 @@
-﻿const FilterStr = (obj, dT, cN) => {
+﻿
+/**
+ * Mẫu filter bằng str
+ * @param {any} obj
+ * @param {any} dT DataType
+ * @param {any} cN ColumnName
+ */
+const FilterStr = (obj, dT, cN) => {
     if (dT == 'number') {
         return '<div class="filter-toggle pull-right"><i class="fa fa-filter"></i><div class="filter-wrapper"><div class="filter-button" onclick=' + obj + '.FilterDataColumn(this);><i class="fa fa-filter"></i></div><div class="filter-option"><select name="option-' + cN + '"><option value="0">==</option><option value="1">></option><option value="2"><</option><option value="3">>=</option><option value="4"><=</option><option value="7">!=</option><option value="5">Between</option></select></div><div class="filter-input"><input type="text" name="' + cN + '" /></div></div></div>';
     }
@@ -10,6 +17,9 @@
     }
 }
 
+/**
+ * Trước định tạo 1 class riêng để define từng cột của dữ liệu đầu vào nhưng hiện tại dùng luôn json data.
+ * */
 class ColumnDefine {
     constructor(ColumnName, DisplayName, Visible, Order, QuickSort, Filter, DataType, Width) {
         this.ColumnName = ColumnName;
@@ -23,14 +33,21 @@ class ColumnDefine {
     }
 }
 
+/**Convert số 
+ * Dự định mở rộng hàm này cho nhập 1 vài tham số đầu vào như
+ * số lượng chữ số được làm tròn sau dấu thập phân...*/
 const VQQGridNumberFormatter = new Intl.NumberFormat('en-US', {
     //style: 'currency',
     //currency: 'VND',
     minimumFractionDigits: 2
 })
 
+/**
+ * Kiểm tra IsNullOrEmpty và defined của 1 object
+ * @param {any} data
+ */
 const IsNotNull = (data) => {
-    return data != null || data != '' || data != undefined;
+    return data != null && data != '' && data != undefined;
 }
 
 $(document).mouseup(function (e) {
@@ -46,7 +63,23 @@ $(document).on('click', '.filter-toggle', function (e) {
     //}
 });
 
+/**Class tổng VietQQGrid định nghĩa, generate table form và các hành động của table dựa vào các input */
 class VQQGrid {
+    /**
+     * 
+     * @param {any} ObjectName Tên bảng muốn đặt (nên là unique)
+     * @param {any} ColumnOrder Dữ liệu cấu hình cho từng cột trong table
+     * @param {any} Url Url để load dữ liệu pagging
+     * @param {any} DefaultPageCount Trang được active lần load đầu
+     * @param {any} DefaultPageSize PageSize mặc định
+     * @param {any} DefaultPageSizeOptions Array pagesize sẽ được assign cho table
+     * @param {any} DefaultMaxPage Tối đa bao nhiêu số trang liên tiếp được hiển thị
+     * Ví dụ: DefaultMaxPage=5, CurrentPage=5, TotalPage=100 => Display: << < 3 4 [5] 6 7 > >>
+     * @param {any} DestinationTable Vị trí đặt table trên Html
+     * @param {any} DestinationPagging Vị trí đặt Footer table trên Html
+     * @param {any} DestinationPageSize Vị trí đặt dropdown pageSize
+     * @param {any} HeaderSwitch Vị trí đặt option thay đổi ẩn hiện cột
+     */
     constructor(ObjectName, ColumnOrder, Url, DefaultPageCount, DefaultPageSize, DefaultPageSizeOptions, DefaultMaxPage, DestinationTable, DestinationPagging, DestinationPageSize, HeaderSwitch) {
         this.objectName = ObjectName;
         this.columnOrder = ColumnOrder;
@@ -90,7 +123,9 @@ class VQQGrid {
         this.columnOrder.filter(e => e.Visible == true).sort((a, b) => (a.Order > b.Order) ? 1 : -1).forEach(function (value) {
             str += "<th column-pivot=" + value.ColumnName + " style='width:" + value.Width + ";'>"
             str += "<div class=\"header-title pull-left\"><span " + (value.QuickSort ? "data-direction='0' onclick='" + current.objectName + ".QuickSort(this)'" : "") + ">" + value.DisplayName + "</span><i icon-direction=''></i></div>";
-            str += FilterStr(current.objectName, value.DataType.Name, value.ColumnName);
+            if (value.Filter) {
+                str += FilterStr(current.objectName, IsNotNull(value.DataType) ? value.DataType.Name : "", value.ColumnName);
+            }
             str += "</th>";
         });
         str += "</tr></thead>";
@@ -215,6 +250,13 @@ class VQQGrid {
         return { pC: pC, pS: pS, sort: sort, filters: filters };
     }
 
+    /**
+     * Gen số trang ...
+     * @param {any} pageNo
+     * @param {any} pageSize
+     * @param {any} maxPage
+     * @param {any} totalRecord
+     */
     PaggingGenerate(pageNo, pageSize, maxPage, totalRecord) {
         let first = "<button data-page='0'><<</button>";
         let last = "<button data-page='0'>>></button>";
@@ -264,6 +306,10 @@ class VQQGrid {
         return str;
     }
 
+    /**
+     * Gen dropdown pageSize
+     * @param {any} pageSize
+     */
     PageSizeGenerate(pageSize) {
         let str = '<select onchange="' + this.objectName + '.PageSizeChange($(this).val());">';
         this.defaultPageSizeOptions.forEach(element => {
@@ -278,6 +324,14 @@ class VQQGrid {
         return str;
     }
 
+    /**
+     * Hàm gọi server lấy data
+     * @param {any} pageCount
+     * @param {any} pageSize
+     * @param {any} isOriginal
+     * @param {any} sort
+     * @param {any} filter
+     */
     GetPaging(pageCount, pageSize, isOriginal = 0, sort, filter) {
         let current = this;
         $.ajax({
@@ -376,6 +430,7 @@ class VQQGrid {
         }
     }
 
+    /** Khởi tạo kéo thả để thay đổi thứ tự cột */
     InitSortable() {
         let current = this;
         $("." + this.objectName + "-sortable").sortable({
