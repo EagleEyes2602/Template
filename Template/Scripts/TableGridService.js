@@ -156,6 +156,10 @@ class VQQGrid {
         return str + '</tbody>';
     }
 
+    /**
+     * Mapping column với dữ liệu đầu vào bằng columnOrder
+     * @param {any} data
+     */
     MappingColumn(data) {
         let arr = [];
         let col = Object.keys(data[0]);
@@ -169,6 +173,11 @@ class VQQGrid {
         return arr;
     }
 
+    /**
+     * Chuyển đổi dữ liệu
+     * @param {any} input
+     * @param {any} dataType
+     */
     ConvertDataType(input, dataType) {
         if (IsNotNull(input) && IsNotNull(dataType)) {
             if (dataType.Name.toLowerCase() == 'currency') {
@@ -213,7 +222,13 @@ class VQQGrid {
             alert('Filter trống');
         }
     }
-
+    /**
+     * 
+     * @param {any} pS PageSize
+     * @param {any} pC PageCount
+     * @param {any} sort
+     * @param {any} filters
+     */
     GetAllData(pS = null, pC = null, sort = null, filters = null) {
         let current = this;
         // Page size
