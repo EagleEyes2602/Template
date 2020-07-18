@@ -2,8 +2,9 @@
 @{
     ViewBag.Title = "Index";
 }
-
+<link href="~/Content/style.css" rel="stylesheet" />
 <style>
+
     [pagging="main"] a {
         cursor: pointer;
         text-decoration: underline;
@@ -14,17 +15,17 @@
         width: auto;
     }
 
-    .current {
+    /*.current {
         color: #3498db;
-    }
+    }*/
 
-    [class*='-sortable'] {
+    /*[class*='-sortable'] {
         cursor: grab;
-    }
+    }*/
 
-    tr {
+    /*tr {
         display: flex;
-    }
+    }*/
 
     th span {
         cursor: pointer;
@@ -34,10 +35,28 @@
             border-right: 2px solid #000;
             float: right;
             height: 16px;
-            cursor: grab;
+            cursor: grab;   
         }
 
+    form#test {
+        position: relative;
+        top: 6rem;
+        left: 12em;
+        width: 80rem;
+    }
+
     .table {
+    }
+
+    thead, tbody {
+        display: block;
+        width: 110.5rem;
+    }
+
+    tbody {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: 280px;
     }
 
     td, th {
@@ -64,6 +83,29 @@
         margin-bottom: 3px;
         cursor: pointer;
     }
+
+    .pagination {
+        display: inline-block;
+        padding-left: 45rem;
+        margin: 20px 0;
+        border-radius: 4px;
+        padding-top: 6rem;
+    }
+
+
+
+        .pagination button {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            border: none;
+        }
+
+        .pagination button.current {
+            background-color: royalblue;
+            color: white;
+            border-radius: 5px;
+        }
 
         .filter-button i {
             color: #2196f3;
@@ -94,11 +136,10 @@
     }
 </style>
 
-<h2>Index</h2>
 <form id='test'>
     <table table-engine="main" class="table table-bordered table-hover" border="1" data="" id="sortable"></table>
 </form>
-<div table-engine-pagging="main"></div>
+<div table-engine-pagging="main" class="pagination"></div>
 
 <div table-engine-pagesize="main"></div>
 
@@ -160,6 +201,11 @@
     let dPSOpts = [5, 10, 20, 50];
     let dMP = 3;
     let test = new VQQGrid(objN, colOrder, url, dPC, dPS, dPSOpts, dMP, desTbl, desPage, desPageSize, desSwitch);
+    $('table').on('scroll', function () {
+        $("table > *").width($("table").width() + $("table").scrollLeft());
+    });
+
+    
 </script>
 
 

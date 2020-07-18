@@ -273,8 +273,8 @@ class VQQGrid {
      * @param {any} totalRecord
      */
     PaggingGenerate(pageNo, pageSize, maxPage, totalRecord) {
-        let first = "<button data-page='0'><<</button>";
-        let last = "<button data-page='0'>>></button>";
+        let first = "<button data-page='0' onclick='" + this.objectName + ".PageCountChange(1);'><<</button>";
+        //let last = "<button data-page='0'>>></button>";
         let pre = "<button data-page='0'><</button>";
         let next = "<button data-page='0'>></button>";
         let str = "";
@@ -314,13 +314,14 @@ class VQQGrid {
                 str += next;
             }
             if (pageNo < totalPage - 1) {
-                str += last;
+                str += "<button data-page='0' onclick='" + this.objectName + ".PageCountChange("+totalPage+");'>>></button>";
             }
         }
         str += "<p class='page-limit' data-total-record='" + totalRecord + "'>" + ((pageNo - 1) * pageSize + 1) + " - " + (pageNo * pageSize > totalRecord ? totalRecord : pageNo * pageSize) + " / " + totalRecord + "<p>";
         return str;
     }
 
+    
     /**
      * Gen dropdown pageSize
      * @param {any} pageSize
