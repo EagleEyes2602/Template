@@ -275,8 +275,8 @@ class VQQGrid {
     PaggingGenerate(pageNo, pageSize, maxPage, totalRecord) {
         let first = "<button data-page='0' onclick='" + this.objectName + ".PageCountChange(1);'><<</button>";
         //let last = "<button data-page='0'>>></button>";
-        let pre = "<button data-page='0'><</button>";
-        let next = "<button data-page='0'>></button>";
+        //let pre = "<button data-page='0'><</button>";
+        //let next = "<button data-page='0'>></button>";
         let str = "";
         let totalPage = Math.ceil(totalRecord / pageSize);
         if (pageNo > 0 && pageSize > 0 && maxPage > 0 && totalRecord > 0 && totalPage >= pageNo) {
@@ -284,7 +284,7 @@ class VQQGrid {
                 str += first;
             }
             if (pageNo > 1) {
-                str += pre;
+                str += "<button data-page='0' onclick='" + this.objectName + ".PageCountChange("+ (pageNo - 1) +");'><</button>";
             }
             let halfMaxPage = Math.round(maxPage / 2);
             let lowwerPage;
@@ -311,10 +311,10 @@ class VQQGrid {
                 str += (i == pageNo) ? "<button class='current' value='" + i + "'>" + i + "</button>" : "<button onclick='" + this.objectName + ".PageCountChange(" + i + ");'>" + i + "</button>";
             }
             if (pageNo < totalPage) {
-                str += next;
+                str += "<button data-page='0' onclick='" + this.objectName + ".PageCountChange(" + (pageNo + 1) + ");'>></button>";
             }
             if (pageNo < totalPage - 1) {
-                str += "<button data-page='0' onclick='" + this.objectName + ".PageCountChange("+totalPage+");'>>></button>";
+                str += "<button data-page='0' onclick='" + this.objectName + ".PageCountChange(" + totalPage + ");'>>></button>";
             }
         }
         str += "<p class='page-limit' data-total-record='" + totalRecord + "'>" + ((pageNo - 1) * pageSize + 1) + " - " + (pageNo * pageSize > totalRecord ? totalRecord : pageNo * pageSize) + " / " + totalRecord + "<p>";
